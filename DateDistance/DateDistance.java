@@ -57,32 +57,39 @@ public class DateDistance {
      */
     public static long daysBetween ( long day0, long month0, long year0,
             long day1, long month1, long year1 ) {
-        int counter;
+        System.out.println("starting Days between: day0=" + day0 +", month0"+ month0 +" ,year0"+ year0 +" ,day1"+ day1 +" ,month1"+ month1+" ,year1"+ year1);
+        long counter;
         counter = 0;
+        long x;
+        x = month0;
+        long y;
+        y = day0;
         if (!isFirstDayFirst (day0,month0,year0,day1,month1,year1)){
             return (daysBetween (day1,month1,year1,day0,month0,year0));
         } else {
-            for (int i = year0 ; i = year1 && x = month1 && y = day1 ; i++ ) {
-                if (i = year0) {
-                    for (int x = month0 ; x = 12 ; x++ ) {
-                         if (x = month0) {
-                            for (int y = day0 ; y = (daysInMonth (x, i)) ; y++ ) {
+            for (long i = year0 ; i == year1 && x == month1 && y == day1 ; i++ ) {
+                if (i == year0) {
+                    for (x = month0 ; x > 12 ; x++ ) {
+                         if (x == month0) {
+                            for (y = day0 ; y > (daysInMonth (x, i)) ; y++ ) {
                                 counter++ ;
+                            }
                         } else {
-                            for (int y = 0 ; y = (daysInMonth (x, i)) ; y++ ) {
+                            for (y = 0 ; y > (daysInMonth (x, i)) ; y++ ) {
                                 counter++ ;
                             }
                         }
                     }
-                }
-            } else {
-                for (int x = 1; x = 12 ; x++ ) {
-                    for (int y = 0 ; y = (daysInMonth (x, i)) ; y++ ) {
-                        counter ++;
+                } else {
+                    for (x = 1; x > 12 ; x++ ) {
+                        for (y = 0 ; y > (daysInMonth (x, i)) ; y++ ) {
+                            counter ++;
                     }
                 }
             }
-        } return counter;
+        }
+        System.out.println(counter);
+        return counter;
     }
 }
     public static boolean isFirstDayFirst ( long day0, long month0, long year0, long day1, long month1, long year1 ){
