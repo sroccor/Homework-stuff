@@ -1,5 +1,13 @@
 public class DateDistance {
 
+    private static String MON = "Monday";
+    private static String TUES = "Tuesday";
+    private static String WED = "Wednesday";
+    private static String THURS = "Thursday";
+    private static String FRI = "Friday";
+    private static String SAT = "Saturday";
+    private static String SUN = "Sunday";
+
     /**
      * Returns whether the given year is a leap year.
      */
@@ -57,41 +65,48 @@ public class DateDistance {
      */
     public static long daysBetween ( long day0, long month0, long year0,
             long day1, long month1, long year1 ) {
-        System.out.println("starting Days between: day0=" + day0 +", month0"+ month0 +" ,year0"+ year0 +" ,day1"+ day1 +" ,month1"+ month1+" ,year1"+ year1);
-        long counter;
+        int counter;
         counter = 0;
-        long x;
-        x = month0;
-        long y;
-        y = day0;
         if (!isFirstDayFirst (day0,month0,year0,day1,month1,year1)){
             return (daysBetween (day1,month1,year1,day0,month0,year0));
         } else {
-            for (long i = year0 ; i == year1 && x == month1 && y == day1 ; i++ ) {
+            for (long i = year0 ; i <= year1; i++ ) {
                 if (i == year0) {
-                    for (x = month0 ; x > 12 ; x++ ) {
+                    for (long x = month0 ; x <= 12 ; x++ ) {
                          if (x == month0) {
-                            for (y = day0 ; y > (daysInMonth (x, i)) ; y++ ) {
-                                counter++ ;
+                            for (long y = day0 ; y <= (daysInMonth (x, i)) ; y++ ) {
+                                counter = counter + 1 ;
                             }
                         } else {
-                            for (y = 0 ; y > (daysInMonth (x, i)) ; y++ ) {
-                                counter++ ;
+                            for (long y = 1 ; y <= (daysInMonth (x, i)) ; y++ ) {
+                                counter = counter + 1 ;
+                            }
+                        }
+                    }
+                } else if (i == year1) {
+                    for (long x = 1; x <= month1  ; x++ ) {
+                        if (x == month1) {
+                            for (long y = 1 ; y < day1 ; y++ ) {
+                                counter = counter + 1;
+                            }
+                        } else {
+                            for (long y = 1 ; y <= (daysInMonth (x, i)) ; y++ ) {
+                                counter = counter + 1 ;
                             }
                         }
                     }
                 } else {
-                    for (x = 1; x > 12 ; x++ ) {
-                        for (y = 0 ; y > (daysInMonth (x, i)) ; y++ ) {
-                            counter ++;
+                    for (long x = 1; x <= 12  ; x++ ) {
+                        for (long y = 1 ; y <= (daysInMonth (x, i)) ; y++ ) {
+                            counter = counter + 1 ;
+                        }
                     }
                 }
             }
+            System.out.println(counter);
+            return counter;
         }
-        System.out.println(counter);
-        return counter;
     }
-}
     public static boolean isFirstDayFirst ( long day0, long month0, long year0, long day1, long month1, long year1 ){
         if (year0 < year1){
             return true;
@@ -112,8 +127,52 @@ public class DateDistance {
      * Returns the day of the week the given date occured on as a String.
      */
     public static String dayOfTheWeek ( long day, long month, long year ) {
-        return ""; // TODO: Finish this method!
+       // Febuary 1st 2017 is a Wednesday
+        long x = daysBetween (1, 2, 2017, day, month, year);
+        long y = x % 7;
+        boolean future = isFirstDayFirst (1, 2, 2017, day, month, year);
+        if (y == 0) {
+            return WED;
+        } else if (y == 1) {
+            if (future) {
+                return THURS;
+            } else {
+                return TUES;
+            }
+        } else if (y == 2) {
+            if (future) {
+                return FRI;
+            } else {
+                return MON;
+            }
+        } else if (y == 3) {
+            if (future) {
+                return SAT;
+            } else {
+                return SUN;
+            }
+        } else if (y == 4) {
+            if (future) {
+                return SUN;
+            } else {
+                return SAT;
+            }
+        } else if (y == 5) {
+            if (future) {
+                return MON;
+            } else {
+                return FRI;
+            }
+        } else if (y == 6) {
+            if (future) {
+                return TUES;
+            } else {
+                return THURS;
+            }
+        }
+        return "Unexpected Error";
     }
+
 
     /**
      * Returns the long form of the given date as a String.
