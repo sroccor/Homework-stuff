@@ -11,6 +11,8 @@ public class Deck {
     private int topCardIndex;
 
     public static final int STANDARD_DECK_SIZE = 52;
+
+    private int DeckLength;
     /**
      * Constructs an unshuffled standard 52 card deck using French suits.
      */
@@ -18,9 +20,11 @@ public class Deck {
         this.cards = new Card[STANDARD_DECK_SIZE];
         this.topCardIndex = 0;
         int cardIndex = 0;
+        int DeckLength = this.cards.length;
         for (Card.Suit suit : Card.Suit.values() ) {
-            for (int i = 1 ; i <= 13 ; i++ ) {
-                this.cards[cardIndex] = new Card (i, suit);
+            for (int i = Card.ACE ; i <= Card.KING ; i++ ) {
+                cards[cardIndex] = new Card (i, suit);
+                cardIndex++;
             }
         }
     }
@@ -34,11 +38,18 @@ public class Deck {
      *                                       is provided
      */
     public Deck( int copiesPerCard ) {
+        if (copiesPerCard <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.cards = new Card[STANDARD_DECK_SIZE * copiesPerCard];
+        this.topCardIndex = 0;
+        int DeckLength = this.cards.length;
         int cardIndex = 0;
-        for (int j = 0;j <= copiesPerCard ; j++ ) {
+        for (int copy = 1; copy <= copiesPerCard ; copy++ ) {
             for (Card.Suit suit : Card.Suit.values() ) {
-                for (int i = 1 ; i <= 13 ; i++ ) {
-                    this.cards[cardIndex] = new Card (i, suit);
+                for (int i = Card.ACE ; i <= Card.KING ; i++ ) {
+                    cards[cardIndex] = new Card (i, suit);
+                    cardIndex++;
                 }
             }
         }
@@ -51,8 +62,7 @@ public class Deck {
      * @return         the number of cards remaining in the deck
      */
     public int remainingCards() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        return this.cards.length - this.topCardIndex ;
     }
 
     /**
@@ -62,9 +72,10 @@ public class Deck {
      * @return         a copy of the Card at the top of the deck
      * @throws ArrayIndexOutOfBoundsException      if there are no more cards left to draw
      */
-    public Card drawCardFromTop() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+     public Card drawCardFromTop() {
+         Card temp = this.cards [this.topCardIndex];
+         this.topCardIndex++;
+         return temp;
     }
 
     /**
@@ -77,8 +88,13 @@ public class Deck {
      *                       otherwise.
      */
     public boolean orderedEquals( Deck otherDeck ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        if (this.cards.length == otherDeck.cards.length) {
+            for (int i = 0; i < this.cards.length; i++ ) {
+                if (this.cards[i].equals(otherDeck.cards[i])) {
+                    System.out.print("*");
+                } return false;
+            }return true;
+        } return false;
     }
 
     /**
@@ -88,8 +104,7 @@ public class Deck {
      * @return         the Card at the given index.
      */
     public Card getCardAt( int index ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        return this.cards[index];
     }
 
     /**
@@ -100,16 +115,19 @@ public class Deck {
      * @param card        the Card to be inserted into the Deck
      */
     public void setCardAt( int index, Card card ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        this.cards[index] = card;
     }
 
     /**
      * Randomly reorders this deck, including any drawn cards.
      */
     public void shuffle() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        for (int i = 0; i <= this.cards.length ; i++ ) {
+            double x = Math.floor(Math.random() * ((double)this.cards.length - (double)0)) + (double)0;
+            Card temp = this.cards[i];
+            this.cards[i]= this.cards[(int)x];
+            this.cards[(int)x]= temp;
+        }
     }
 
     /**
@@ -120,8 +138,14 @@ public class Deck {
      *                 argument; <code>false</code> otherwise.
      */
     public boolean isStandardDeck() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        Deck jeff = new Deck ()  ;
+        if (this.cards.length == jeff.cards.length) {
+            for (int i = 0; i < this.cards.length; i++ ) {
+                if (this.cards[i].equals(jeff.cards[i])) {
+                    System.out.print("*");
+                } return false;
+            }return true;
+        } return false;
     }
 
     /**
