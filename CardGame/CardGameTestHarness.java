@@ -20,7 +20,8 @@ public class CardGameTestHarness {
         test_DeckShuffle();
         test_DeckIsStandard();
 
-        //TODO Tests for Hand
+        test_HandConstants();
+        test_HandConstructors();
 
         //TODO Tests for CardGame
 
@@ -1194,6 +1195,7 @@ public class CardGameTestHarness {
                         && firstDeckStandard.equals(controlDeckStandard)
                         && secondDeckStandard.equals(controlDeckStandard));
             } catch(Exception e) {
+                e.printStackTrace();
                 displaySuccessIfTrue(false);
             }
         }
@@ -1267,5 +1269,67 @@ public class CardGameTestHarness {
         }
 
         System.out.println("Deck isStandardDeck: " + (successes - initialSuccesses) + "/" + (attempts - initialAttempts) + " passed");
+
     }
+    public static void test_HandConstants(){
+        System.out.println("Testing Hand constants...");
+        int initialSuccesses = successes;
+        int initialAttempts = attempts;
+
+        try {
+            displaySuccessIfTrue(Hand.STANDARD_HAND_SIZE == 5);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        System.out.println("Hand constants: " + (successes - initialSuccesses) + "/" + (attempts - initialAttempts) + " passed");
+    }
+    public static void test_HandConstructors(){
+        System.out.println("Testing Hand constructors...");
+        int initialSuccesses = successes;
+        int initialAttempts = attempts;
+        Deck testDeck = new Deck();
+
+        try {
+            Hand testHand = new Hand();
+            displaySuccessIfTrue(testHand.getHandSize() == 5);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        try {
+            Hand testHand = new Hand(1);
+            displaySuccessIfTrue(testHand.getHandSize() == 1);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        try {
+            Hand testHand = new Hand(7);
+            displaySuccessIfTrue(testHand.getHandSize() == 7);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        try {
+            Hand testHand = new Hand(0);
+            displaySuccessIfTrue(false);
+        } catch(IllegalArgumentException iae) {
+            displaySuccessIfTrue(true);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        try {
+            Hand testHand = new Hand(-3);
+            displaySuccessIfTrue(false);
+        } catch(IllegalArgumentException iae) {
+            displaySuccessIfTrue(true);
+        } catch(Exception e) {
+            displaySuccessIfTrue(false);
+        }
+
+        System.out.println("Hand constructors: " + (successes - initialSuccesses) + "/" + (attempts - initialAttempts) + " passed");
+    }
+
 }
