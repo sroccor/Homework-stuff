@@ -37,12 +37,27 @@ public class CardGame {
         this.handTwo.drawNewHandFrom(gameDeck);
         roundScoreOne = this.scoreHand(handOne, handTwo);
         roundScoreTwo = this.scoreHand(handTwo, handOne);
+
+        System.out.println("Your hand: ");
+        System.out.println(handOne.toString());
+        System.out.println("Score: " + roundScoreOne + "\n");
+
+        System.out.println("Opponent's hand: ");
+        System.out.println(handTwo.toString());
+        System.out.println("Score: " + roundScoreTwo + "\n");
+
         if (roundScoreOne > roundScoreTwo) {
-            this.playerScore = roundScoreOne - roundScoreTwo;
-            System.out.println("Player One Wins Round");
+            int updateAmount = roundScoreOne - roundScoreTwo;
+            this.playerScore += updateAmount;
+            System.out.println("You score " + updateAmount + " points !");
+            System.out.println("You: " + playerScore);
+            System.out.println("Opponent: " + oppoScore);
         } else if (roundScoreTwo > roundScoreOne) {
-            this.oppoScore = roundScoreTwo - roundScoreOne;
-            System.out.println("Player Two Wins Round");
+            int updateAmount = roundScoreTwo - roundScoreOne;
+            this.oppoScore += updateAmount;
+            System.out.println("Opponent scores " + updateAmount + " points !");
+            System.out.println("You: " + playerScore);
+            System.out.println("Opponent: " + oppoScore);
         }
     }
 
@@ -93,14 +108,41 @@ public class CardGame {
 
     //returns whether the game is over based upon both players' scores and the cards remaining in the deck.
     public boolean isGameOver(){
-        if (playerScore == oppoScore && playerScore == 50) {
-            System.out.println("The Game ends in a Tie");
+        if (gameDeck.remainingCards() < 10) {
+            if (playerScore == oppoScore) {
+                System.out.println("\n---GAME OVER---");
+                System.out.println("Tie!!");
+                System.out.println("You: " + playerScore);
+                System.out.println("Opponent: " + oppoScore);
+            } else if (playerScore > oppoScore) {
+                System.out.println("\n---GAME OVER---");
+                System.out.println("You Win!");
+                System.out.println("You: " + playerScore);
+                System.out.println("Opponent: " + oppoScore);
+            } else {
+                System.out.println("\n---GAME OVER---");
+                System.out.println("Opponent Wins!");
+                System.out.println("You: " + playerScore);
+                System.out.println("Opponent: " + oppoScore);
+            }
             return true;
-        } else if (playerScore == 50) {
-            System.out.println("Player One wins the Game");
+        } else if(playerScore == oppoScore && playerScore >= END_SCORE ) {
+            System.out.println("\n---GAME OVER---");
+            System.out.println("Tie!!");
+            System.out.println("You: " + playerScore);
+            System.out.println("Opponent: " + oppoScore);
             return true;
-        } else if (oppoScore == 50) {
-            System.out.println("Player Two wins the Game");
+        } else if (playerScore >= END_SCORE && playerScore > oppoScore) {
+            System.out.println("\n---GAME OVER---");
+            System.out.println("You Win!");
+            System.out.println("You: " + playerScore);
+            System.out.println("Opponent: " + oppoScore);
+            return true;
+        } else if (oppoScore >= END_SCORE && oppoScore > playerScore) {
+            System.out.println("\n---GAME OVER---");
+            System.out.println("Opponent Wins!");
+            System.out.println("You: " + playerScore);
+            System.out.println("Opponent: " + oppoScore);
             return true;
         } else {
             return false;
@@ -109,7 +151,26 @@ public class CardGame {
 
     //plays out a multi-round game, printing out the results of each round, the final score, and the overall winner (if there is one).
     public void playGame(){
-        throw new UnsupportedOperationException();
+        int roundNumber = 0;
+        gameDeck.shuffle();
+        while (!isGameOver()) {
+            roundNumber++;
+            System.out.println("\n---Round " + roundNumber + "---");
+            playRound();
+        }
     }
 
+    public static void main(String[] args) {
+        if (args.length == 2) {
+            int handSize = Integer.parseInt(args[0]);
+            int deckCopies = Integer.parseInt(args[1]);
+            CardGame myCardGame = new CardGame(handSize, deckCopies);
+            myCardGame.playGame();
+        } else if (args.length == 0) {
+            CardGame myCardGame = new CardGame();
+            myCardGame.playGame();
+        } else {
+            System.out.println("Usage instructions: java CardGame [<hand size> <copies of each card in deck>]");
+        }
+    }
 }
