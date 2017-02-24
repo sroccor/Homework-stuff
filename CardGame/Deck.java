@@ -90,11 +90,13 @@ public class Deck {
     public boolean orderedEquals( Deck otherDeck ) {
         if (this.cards.length == otherDeck.cards.length) {
             for (int i = 0; i < this.cards.length; i++ ) {
-                if (this.cards[i].equals(otherDeck.cards[i])) {
-                    System.out.print("*");
-                } return false;
-            }return true;
-        } return false;
+                if (!this.cards[i].equals(otherDeck.cards[i])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -122,7 +124,7 @@ public class Deck {
      * Randomly reorders this deck, including any drawn cards.
      */
     public void shuffle() {
-        for (int i = 0; i <= this.cards.length ; i++ ) {
+        for (int i = 0; i < this.cards.length ; i++ ) {
             double x = Math.floor(Math.random() * ((double)this.cards.length - (double)0)) + (double)0;
             Card temp = this.cards[i];
             this.cards[i]= this.cards[(int)x];
@@ -139,13 +141,11 @@ public class Deck {
      */
     public boolean isStandardDeck() {
         Deck jeff = new Deck ()  ;
-        if (this.cards.length == jeff.cards.length) {
-            for (int i = 0; i < this.cards.length; i++ ) {
-                if (this.cards[i].equals(jeff.cards[i])) {
-                    System.out.print("*");
-                } return false;
-            }return true;
-        } return false;
+        if (jeff.equals(this)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -156,8 +156,11 @@ public class Deck {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        String result = "";
+        for (int i = 0;i < this.cards.length ; i++ ) {
+            result += this.cards[i].toString() + "\n";
+        }
+        return result;
     }
 
     // Advanced Java---Proceed at own risk!

@@ -4,26 +4,31 @@
  */
 public class Hand {
     private Card[] cardsInHand;
-    public static final int STANDARD_HAND_SIZE = 0; //TODO: Initialize this variable properly!
-
-    /**
-     * Constructs an empty hand of the standard hand size.
-     */
-    public Hand() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
-    }
-
+    public static final int STANDARD_HAND_SIZE = 5;
+    Deck NewDeck = new Deck();
     /**
      * Constructs an empty hand of the provided size.
      * @param handSize     the number of cards the hand can hold
      * @throws IllegalArgumentException    if an non-positive hand size is provided
      */
     public Hand( int handSize ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        if (handSize <= 0) {
+            throw new IllegalArgumentException();
+        }
+        this.cardsInHand = new Card[handSize];
+        int HandIndex = 0;
+        //for (int i = 0; i <= handSize ; i++ ) {
+            cardsInHand[HandIndex] = this.NewDeck.drawCardFromTop();
+            HandIndex++;
+        //}
     }
 
+    /**
+     * Constructs an empty hand of the standard hand size.
+     */
+    public Hand() {
+        this(STANDARD_HAND_SIZE);
+    }
     /**
      * Draws a new hand from the provided deck, replacing the cards in the hand
      * with the top cards from the deck. The new top card of the deck is the
@@ -32,8 +37,10 @@ public class Hand {
      * @param deck     the number of cards the hand can hold
      */
     public void drawNewHandFrom( Deck deck ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        int HandIndex = 0;
+        for (int i = 0; i < this.getHandSize(); i++ ) {
+            cardsInHand[i] = deck.drawCardFromTop();
+        }
     }
 
     /**
@@ -42,8 +49,7 @@ public class Hand {
      * @return          the number of card this hand can hold
      */
     public int getHandSize() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        return this.cardsInHand.length;
     }
 
     /**
@@ -53,8 +59,7 @@ public class Hand {
      * @return          the card at the provided index in the hand
      */
     public Card getCardAt( int index ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        return cardsInHand[index];
     }
 
     /**
@@ -65,8 +70,11 @@ public class Hand {
      */
     @Override
     public String toString() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        String handy = "";
+        for (int i = 0; i < this.getHandSize(); i++) {
+            handy += this.cardsInHand[i].toString() + "\n";
+        }
+        return handy;
     }
 
     /**
@@ -78,8 +86,12 @@ public class Hand {
      *                 card; <code>false</code> otherwise.
      */
     public boolean contains( Card card ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        for (int i = 0; i <= this.getHandSize(); i++ ) {
+            if (this.cardsInHand[i].equals(card)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -90,8 +102,16 @@ public class Hand {
      * @throws IllegalArgumentException    if an invalid rank is provided
      */
     public int countInHand( int rank ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        int counter = 0;
+        if (rank < 1 || rank > 13) {
+            throw new IllegalArgumentException();
+        } else {
+            for (int i = 0; i < this.getHandSize(); i++) {
+                if (this.cardsInHand[i].getRank() == rank) {
+                    counter++;
+                }
+            } return counter;
+        }
     }
 
     /**
@@ -101,8 +121,12 @@ public class Hand {
      * @return         the number of cards in the hand with the provided suit
      */
     public int countInHand( Card.Suit suit ) {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        int counter = 0;
+        for (int i = 0; i < this.getHandSize(); i++) {
+            if (this.cardsInHand[i].getSuit() == suit) {
+                counter++;
+            }
+        } return counter;
     }
 
     /**
@@ -112,7 +136,11 @@ public class Hand {
      * @return         the number of cards in the hand with face ranks
      */
     public int countOfFaceCards() {
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        int counter = 0;
+        for (int i = 0;i < this.getHandSize() ;i++) {
+            if (this.cardsInHand[i].getRank() >= 11) {
+                counter++;
+            }
+        } return counter;
     }
 }
