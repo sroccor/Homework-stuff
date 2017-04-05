@@ -27,21 +27,159 @@ public class BigInteger{
                 trimmedVal = trimmedVal.substring(1);
             }
         } //System.out.println(trimmedVal);
-        
+
         this.number = new int[trimmedVal.length()];
         for (int i = 0 ; i < trimmedVal.length() ; i++ ) {
-            this.number[i] = Character.getNumericValue(trimmedVal.charAt(i));
+            this.number[i] = Character.getNumericValue(trimmedVal.charAt(trimmedVal.length()- i - 1));
         }
     }
 
+    public BigInteger (int[] number2, boolean negative2){
+        if (number2 == null) {
+            throw new NullPointerException();
+        }
+
+        int counter = 0 ;
+        for (int i = number2.length - 1 ; i >= 1 ; i-- ) {
+            if (number2[i] == 0) {
+                counter++;
+            } else {
+                break;
+            }
+        }
+
+        if (counter > 0) {
+            int[] resultTrim = new int[number2.length - counter] ;
+            for (int i = 0 ; i < resultTrim.length ; i++ ) {
+                resultTrim[i] = number2[i];
+            }
+            number2 = resultTrim;
+        }
+        this.number = number2;
+        this.negative = negative2;
+    }
+
     public BigInteger plus ( BigInteger val ){ // returns a BigInteger whose value is this + val
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        System.out.println(" number one " + this.toString() + " number 2 " + val.toString());
+        int[] result = null;
+        boolean resultNegative = false;
+        int carry = 0;
+        if (this.negative == val.negative) {
+            resultNegative = this.negative;
+            if (this.number.length == val.number.length) {
+                result = new int[this.number.length + 1];
+                for (int i = 0 ; i < this.number.length ; i++ ) {
+                    result[i] = carry + this.number[i] + val.number[i];
+                    if (result[i] >= 10) {
+                        result[i] -= 10;
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+                if (carry == 1) {
+                    result[this.number.length] = carry;
+                } else {
+                    result[this.number.length] = 0;
+                }
+            } else if (this.number.length > val.number.length) {
+                result = new int[this.number.length + 1];
+                for (int i = 0 ; i < val.number.length ; i++ ) {
+                    result[i] = carry + this.number[i] + val.number[i];
+                    if (result[i] >= 10) {
+                        result[i] -= 10;
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+                for (int i = val.number.length ; i < this.number.length ; i++ ) {
+                    result[i] = carry + this.number[i];
+                    if (result[i] >= 10) {
+                        result[i] -= 10;
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+                if (carry == 1) {
+                    result[this.number.length] = carry;
+                } else {
+                    result[this.number.length] = 0;
+                }
+            } else if (val.number.length > this.number.length) {
+                result = new int[val.number.length + 1];
+                for (int i = 0 ; i < this.number.length ; i++ ) {
+                    result[i] = carry + this.number[i] + val.number[i];
+                    if (result[i] >= 10) {
+                        result[i] -= 10;
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+                for (int i = this.number.length ; i < val.number.length ; i++ ) {
+                    result[i] = carry + val.number[i];
+                    if (result[i] >= 10) {
+                        result[i] -= 10;
+                        carry = 1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+                if (carry == 1) {
+                    result[val.number.length] = carry;
+                } else {
+                    result[val.number.length] = 0;
+                }
+            }
+        } else if (this.negative == false && val.negative == true) {
+            val.negative = false;
+            return this.minus(val);
+        } else if (this.negative == true && val.negative == false) {
+            this.negative = false;
+            return val.minus(this);
+        }
+        return new BigInteger(result, resultNegative);
     }
 
     public BigInteger minus ( BigInteger val ){ // returns a BigInteger whose value is this - val
-        throw new UnsupportedOperationException();
-        //TODO: Complete this method!
+        System.out.println(" number one " + this.toString() + " number 2 " + val.toString());
+        int[] result = null;
+        boolean resultNegative = false;
+        int carry = 0;
+
+        if (val.greaterThan(this)) {
+            return val.minus(this);
+        }
+
+        if (this.negative == val.negative) {
+            resultNegative = this.negative;
+            if (this.number.length == val.number.length) {
+                result = new int[this.number.length];
+                if (this.number[0] < val.number[0]) {
+                    carry = 10;
+                }
+                for (int i = 0 ; i < this.number.length ; i++ ) {
+                    if (this.number[i] == 0 && !(this.number[i] == val.number[i])) {
+                        carry = 10;
+                    }else if (this.number[i] == 0 && this.number[i] == val.number[i]) {
+                        carry = 0;
+                    }
+                    result[i] = carry + this.number[i] - val.number[i];
+                    if (this.number[i] < val.number[i] && this.number[i++] < val.number[i++]) {
+                        carry = 9;
+                    } else if (this.number[i] < val.number[i] && !(this.number[i++] < val.number[i++])
+                                    || this.number[i] == 0 && !(this.number[i] == val.number[i])) {
+                        carry = -1;
+                    } else {
+                        carry = 0;
+                    }
+                }
+            }
+        }
+        System.out.println(new BigInteger(result, resultNegative).toString() + "result" );
+        return new BigInteger(result, resultNegative);
     }
 
     public BigInteger times ( BigInteger val ){ // returns a BigInteger whose value is this * val
@@ -66,9 +204,9 @@ public class BigInteger{
             result += "-";
         }
         for (int i = 0; i < this.number.length ; i++ ) {
-            result += this.number[i];
+            result += this.number[this.number.length - 1 - i];
         }
-        System.out.println(result);
+        //System.out.println(result);
         return result;
     }
 
@@ -83,13 +221,11 @@ public class BigInteger{
             } else if (val.number.length > this.number.length) {
                 return false;
             } else if (this.number.length == val.number.length) {
-                for (int i = 0 ; i < this.number.length ; i++ ) {
+                for (int i = this.number.length - 1 ; i >= 0 ; i--) {
                     if (this.number[i] > val.number[i]) {
                         return true;
                     } else if (val.number[i] > this.number[i]) {
                         return false;
-                    } else if (val.number[i] == this.number[i]) {
-
                     }
                 }
             }
@@ -99,7 +235,7 @@ public class BigInteger{
             } else if (val.number.length > this.number.length) {
                 return true;
             } else if (this.number.length == val.number.length) {
-                for (int i = 0 ; i < this.number.length ; i++ ) {
+                for (int i = this.number.length - 1 ; i >= 0 ; i--) {
                     if (this.number[i] > val.number[i]) {
                         return false;
                     } else if (val.number[i] > this.number[i]) {
